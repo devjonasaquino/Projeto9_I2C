@@ -7,23 +7,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
   1 .text         0000b144  080002a0  080002a0  000012a0  2**4
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .rodata       000000c8  0800b3e4  0800b3e4  0000c3e4  2**2
+  2 .rodata       000000c4  0800b3e4  0800b3e4  0000c3e4  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  3 .ARM          00000008  0800b4ac  0800b4ac  0000c4ac  2**2
+  3 .ARM          00000008  0800b4a8  0800b4a8  0000c4a8  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  4 .init_array   00000004  0800b4b4  0800b4b4  0000c4b4  2**2
+  4 .init_array   00000004  0800b4b0  0800b4b0  0000c4b0  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  5 .fini_array   00000004  0800b4b8  0800b4b8  0000c4b8  2**2
+  5 .fini_array   00000004  0800b4b4  0800b4b4  0000c4b4  2**2
                   CONTENTS, ALLOC, LOAD, READONLY, DATA
-  6 .data         00000064  24000000  0800b4bc  0000d000  2**2
+  6 .data         00000064  24000000  0800b4b8  0000d000  2**2
                   CONTENTS, ALLOC, LOAD, DATA
-  7 .RxDecripSection 00000060  24000064  0800b520  0000d064  2**2
+  7 .RxDecripSection 00000060  24000064  0800b51c  0000d064  2**2
                   CONTENTS, ALLOC, LOAD, DATA
-  8 .TxDecripSection 00000060  240000c4  0800b580  0000d0c4  2**2
+  8 .TxDecripSection 00000060  240000c4  0800b57c  0000d0c4  2**2
                   CONTENTS, ALLOC, LOAD, DATA
-  9 .bss          00000834  24000124  0800b5e0  0000d124  2**2
+  9 .bss          00000834  24000124  0800b5dc  0000d124  2**2
                   ALLOC
- 10 ._user_heap_stack 00000600  24000958  0800b5e0  0000d958  2**0
+ 10 ._user_heap_stack 00000600  24000958  0800b5dc  0000d958  2**0
                   ALLOC
  11 .ARM.attributes 0000002e  00000000  00000000  0000d124  2**0
                   CONTENTS, READONLY
@@ -540,10 +540,9 @@ void Read_LDR(){
 		  HAL_Delay(100); // Wait before next reading
  8000710:	2064      	movs	r0, #100	@ 0x64
  8000712:	f000 ffb7 	bl	8001684 <HAL_Delay>
-
 		  char counterMessage[9];
 
-		  snprintf(counterMessage, 8, "%s\r\n", ", LDR: ");
+		  snprintf(counterMessage, 8, "%s\r\n", " AIN0: ");
  8000716:	1d38      	adds	r0, r7, #4
  8000718:	4b16      	ldr	r3, [pc, #88]	@ (8000774 <Read_LDR+0x74>)
  800071a:	4a17      	ldr	r2, [pc, #92]	@ (8000778 <Read_LDR+0x78>)
@@ -587,6 +586,7 @@ void Read_LDR(){
  8000768:	2230      	movs	r2, #48	@ 0x30
  800076a:	701a      	strb	r2, [r3, #0]
 
+
 }
  800076c:	bf00      	nop
  800076e:	3710      	adds	r7, #16
@@ -615,11 +615,11 @@ void Read_Temp(){
  800079a:	f000 ff73 	bl	8001684 <HAL_Delay>
 		  char counterMessage[9];
 
-		  snprintf(counterMessage, 9, "%s\r\n", ", Temp: ");
+		  snprintf(counterMessage, 8, "%s\r\n", " AIN1: ");
  800079e:	1d38      	adds	r0, r7, #4
  80007a0:	4b16      	ldr	r3, [pc, #88]	@ (80007fc <Read_Temp+0x74>)
  80007a2:	4a17      	ldr	r2, [pc, #92]	@ (8000800 <Read_Temp+0x78>)
- 80007a4:	2109      	movs	r1, #9
+ 80007a4:	2108      	movs	r1, #8
  80007a6:	f00a f94b 	bl	800aa40 <sniprintf>
 		  HAL_UART_Transmit_IT(&huart3, (uint8_t *)counterMessage, strlen(counterMessage));
  80007aa:	1d3b      	adds	r3, r7, #4
@@ -687,7 +687,7 @@ void Read_Pot(){
  8000822:	f000 ff2f 	bl	8001684 <HAL_Delay>
 		  char counterMessage[9];
 
-		  snprintf(counterMessage, 8, "%s\r\n", ", Pot: ");
+		  snprintf(counterMessage, 8, "%s\r\n", " AIN3: ");
  8000826:	1d38      	adds	r0, r7, #4
  8000828:	4b16      	ldr	r3, [pc, #88]	@ (8000884 <Read_Pot+0x74>)
  800082a:	4a17      	ldr	r2, [pc, #92]	@ (8000888 <Read_Pot+0x78>)
@@ -735,7 +735,7 @@ void Read_Pot(){
  800087e:	3710      	adds	r7, #16
  8000880:	46bd      	mov	sp, r7
  8000882:	bd80      	pop	{r7, pc}
- 8000884:	0800b408 	.word	0x0800b408
+ 8000884:	0800b404 	.word	0x0800b404
  8000888:	0800b3ec 	.word	0x0800b3ec
  800088c:	2400027c 	.word	0x2400027c
  8000890:	0800b3f4 	.word	0x0800b3f4
@@ -746,6 +746,8 @@ void Read_Pot(){
 void Write_DAC(){
  8000898:	b480      	push	{r7}
  800089a:	af00      	add	r7, sp, #0
+
+
 
 }
  800089c:	bf00      	nop
@@ -1550,6 +1552,7 @@ static void MX_GPIO_Init(void)
 08000d74 <PCF8591_ReadAnalog>:
 
 /* USER CODE BEGIN 4 */
+
 //Função de leitura no modulo sensor
 uint8_t PCF8591_ReadAnalog(uint8_t channel)
 {
@@ -1665,12 +1668,12 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
  8000e2a:	3708      	adds	r7, #8
  8000e2c:	46bd      	mov	sp, r7
  8000e2e:	bd80      	pop	{r7, pc}
- 8000e30:	0800b410 	.word	0x0800b410
+ 8000e30:	0800b40c 	.word	0x0800b40c
  8000e34:	240007f4 	.word	0x240007f4
  8000e38:	24000000 	.word	0x24000000
- 8000e3c:	0800b41c 	.word	0x0800b41c
- 8000e40:	0800b428 	.word	0x0800b428
- 8000e44:	0800b434 	.word	0x0800b434
+ 8000e3c:	0800b418 	.word	0x0800b418
+ 8000e40:	0800b424 	.word	0x0800b424
+ 8000e44:	0800b430 	.word	0x0800b430
 
 08000e48 <Error_Handler>:
 /**
@@ -2752,7 +2755,7 @@ LoopFillZerobss:
   ldr r1, =_edata
  800143c:	24000064 	.word	0x24000064
   ldr r2, =_sidata
- 8001440:	0800b4bc 	.word	0x0800b4bc
+ 8001440:	0800b4b8 	.word	0x0800b4b8
   ldr r2, =_sbss
  8001444:	24000124 	.word	0x24000124
   ldr r4, =_ebss
@@ -3065,7 +3068,7 @@ HAL_StatusTypeDef HAL_Init(void)
  80015c4:	46bd      	mov	sp, r7
  80015c6:	bd80      	pop	{r7, pc}
  80015c8:	58024400 	.word	0x58024400
- 80015cc:	0800b440 	.word	0x0800b440
+ 80015cc:	0800b43c 	.word	0x0800b43c
  80015d0:	24000008 	.word	0x24000008
  80015d4:	24000004 	.word	0x24000004
 
@@ -14227,7 +14230,7 @@ HAL_StatusTypeDef HAL_RCC_ClockConfig(RCC_ClkInitTypeDef  *RCC_ClkInitStruct, ui
  8005868:	bd80      	pop	{r7, pc}
  800586a:	bf00      	nop
  800586c:	58024400 	.word	0x58024400
- 8005870:	0800b440 	.word	0x0800b440
+ 8005870:	0800b43c 	.word	0x0800b43c
  8005874:	24000008 	.word	0x24000008
  8005878:	24000004 	.word	0x24000004
  800587c:	2400000c 	.word	0x2400000c
@@ -14629,7 +14632,7 @@ uint32_t HAL_RCC_GetHCLKFreq(void)
  8005bc0:	46bd      	mov	sp, r7
  8005bc2:	bd80      	pop	{r7, pc}
  8005bc4:	58024400 	.word	0x58024400
- 8005bc8:	0800b440 	.word	0x0800b440
+ 8005bc8:	0800b43c 	.word	0x0800b43c
  8005bcc:	24000008 	.word	0x24000008
  8005bd0:	24000004 	.word	0x24000004
 
@@ -14663,7 +14666,7 @@ uint32_t HAL_RCC_GetPCLK1Freq(void)
  8005bf4:	4618      	mov	r0, r3
  8005bf6:	bd80      	pop	{r7, pc}
  8005bf8:	58024400 	.word	0x58024400
- 8005bfc:	0800b440 	.word	0x0800b440
+ 8005bfc:	0800b43c 	.word	0x0800b43c
 
 08005c00 <HAL_RCC_GetPCLK2Freq>:
   * @note   Each time PCLK2 changes, this function must be called to update the
@@ -14694,7 +14697,7 @@ uint32_t HAL_RCC_GetPCLK2Freq(void)
  8005c20:	4618      	mov	r0, r3
  8005c22:	bd80      	pop	{r7, pc}
  8005c24:	58024400 	.word	0x58024400
- 8005c28:	0800b440 	.word	0x0800b440
+ 8005c28:	0800b43c 	.word	0x0800b43c
 
 08005c2c <HAL_RCCEx_PeriphCLKConfig>:
   * (*) : Available on some STM32H7 lines only.
@@ -17730,7 +17733,7 @@ uint32_t HAL_RCCEx_GetD3PCLK1Freq(void)
  8007060:	4618      	mov	r0, r3
  8007062:	bd80      	pop	{r7, pc}
  8007064:	58024400 	.word	0x58024400
- 8007068:	0800b440 	.word	0x0800b440
+ 8007068:	0800b43c 	.word	0x0800b43c
 
 0800706c <HAL_RCCEx_GetPLL2ClockFreq>:
   *         right PLL2CLK value. Otherwise, any configuration based on this function will be incorrect.
@@ -21360,7 +21363,7 @@ HAL_StatusTypeDef UART_SetConfig(UART_HandleTypeDef *huart)
  8008bbe:	e0b5      	b.n	8008d2c <UART_SetConfig+0xa94>
  8008bc0:	03d09000 	.word	0x03d09000
  8008bc4:	003d0900 	.word	0x003d0900
- 8008bc8:	0800b450 	.word	0x0800b450
+ 8008bc8:	0800b44c 	.word	0x0800b44c
  8008bcc:	58024400 	.word	0x58024400
       }
     }
@@ -21576,7 +21579,7 @@ HAL_StatusTypeDef UART_SetConfig(UART_HandleTypeDef *huart)
  8008d58:	58024400 	.word	0x58024400
  8008d5c:	03d09000 	.word	0x03d09000
  8008d60:	003d0900 	.word	0x003d0900
- 8008d64:	0800b450 	.word	0x0800b450
+ 8008d64:	0800b44c 	.word	0x0800b44c
 
 08008d68 <UART_AdvFeatureConfig>:
   * @brief Configure the UART peripheral advanced features.
@@ -25304,8 +25307,8 @@ static void UARTEx_SetNbDataToProcess(UART_HandleTypeDef *huart)
  800a420:	f85d 7b04 	ldr.w	r7, [sp], #4
  800a424:	4770      	bx	lr
  800a426:	bf00      	nop
- 800a428:	0800b468 	.word	0x0800b468
- 800a42c:	0800b470 	.word	0x0800b470
+ 800a428:	0800b464 	.word	0x0800b464
+ 800a42c:	0800b46c 	.word	0x0800b46c
 
 0800a430 <USB_CoreInit>:
   * @param  cfg pointer to a USB_OTG_CfgTypeDef structure that contains
@@ -26494,10 +26497,10 @@ static HAL_StatusTypeDef USB_CoreReset(USB_OTG_GlobalTypeDef *USBx)
  800ab1a:	4798      	blx	r3
  800ab1c:	3601      	adds	r6, #1
  800ab1e:	e7f2      	b.n	800ab06 <__libc_init_array+0x1e>
- 800ab20:	0800b4b4 	.word	0x0800b4b4
- 800ab24:	0800b4b4 	.word	0x0800b4b4
- 800ab28:	0800b4b4 	.word	0x0800b4b4
- 800ab2c:	0800b4b8 	.word	0x0800b4b8
+ 800ab20:	0800b4b0 	.word	0x0800b4b0
+ 800ab24:	0800b4b0 	.word	0x0800b4b0
+ 800ab28:	0800b4b0 	.word	0x0800b4b0
+ 800ab2c:	0800b4b4 	.word	0x0800b4b4
 
 0800ab30 <__retarget_lock_acquire_recursive>:
  800ab30:	4770      	bx	lr
@@ -27003,11 +27006,11 @@ static HAL_StatusTypeDef USB_CoreReset(USB_OTG_GlobalTypeDef *USBx)
  800afb8:	4638      	mov	r0, r7
  800afba:	f000 f879 	bl	800b0b0 <_printf_i>
  800afbe:	e7ed      	b.n	800af9c <_svfiprintf_r+0x1c0>
- 800afc0:	0800b478 	.word	0x0800b478
- 800afc4:	0800b482 	.word	0x0800b482
+ 800afc0:	0800b474 	.word	0x0800b474
+ 800afc4:	0800b47e 	.word	0x0800b47e
  800afc8:	00000000 	.word	0x00000000
  800afcc:	0800ad25 	.word	0x0800ad25
- 800afd0:	0800b47e 	.word	0x0800b47e
+ 800afd0:	0800b47a 	.word	0x0800b47a
 
 0800afd4 <_printf_common>:
  800afd4:	e92d 47f0 	stmdb	sp!, {r4, r5, r6, r7, r8, r9, sl, lr}
@@ -27338,8 +27341,8 @@ static HAL_StatusTypeDef USB_CoreReset(USB_OTG_GlobalTypeDef *USBx)
  800b2e0:	f104 0619 	add.w	r6, r4, #25
  800b2e4:	e7f5      	b.n	800b2d2 <_printf_i+0x222>
  800b2e6:	bf00      	nop
- 800b2e8:	0800b489 	.word	0x0800b489
- 800b2ec:	0800b49a 	.word	0x0800b49a
+ 800b2e8:	0800b485 	.word	0x0800b485
+ 800b2ec:	0800b496 	.word	0x0800b496
 
 0800b2f0 <memmove>:
  800b2f0:	4288      	cmp	r0, r1

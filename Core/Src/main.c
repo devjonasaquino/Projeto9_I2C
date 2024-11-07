@@ -171,10 +171,9 @@ void Read_LDR(){
 	 // Read analog data from A0 (channel 0) of the PCF8591
 		  uint8_t LDR = PCF8591_ReadAnalog(0);
 		  HAL_Delay(100); // Wait before next reading
-
 		  char counterMessage[9];
 
-		  snprintf(counterMessage, 8, "%s\r\n", ", LDR: ");
+		  snprintf(counterMessage, 8, "%s\r\n", " AIN0: ");
 		  HAL_UART_Transmit_IT(&huart3, (uint8_t *)counterMessage, strlen(counterMessage));
 		  HAL_Delay(100);
 
@@ -182,6 +181,7 @@ void Read_LDR(){
 		  HAL_UART_Transmit_IT(&huart3, (uint8_t *)counterMessage, strlen(counterMessage));
 		  HAL_Delay(100);
 		  execute_flag = '0';
+
 
 }
 
@@ -191,7 +191,7 @@ void Read_Temp(){
 		  HAL_Delay(100); // Wait before next reading
 		  char counterMessage[9];
 
-		  snprintf(counterMessage, 9, "%s\r\n", ", Temp: ");
+		  snprintf(counterMessage, 8, "%s\r\n", " AIN1: ");
 		  HAL_UART_Transmit_IT(&huart3, (uint8_t *)counterMessage, strlen(counterMessage));
 		  HAL_Delay(100);
 
@@ -208,7 +208,7 @@ void Read_Pot(){
 		  HAL_Delay(100); // Wait for 1 second before next reading
 		  char counterMessage[9];
 
-		  snprintf(counterMessage, 8, "%s\r\n", ", Pot: ");
+		  snprintf(counterMessage, 8, "%s\r\n", " AIN3: ");
 		  HAL_UART_Transmit_IT(&huart3, (uint8_t *)counterMessage, strlen(counterMessage));
 		  HAL_Delay(100);
 
@@ -219,6 +219,8 @@ void Read_Pot(){
 }
 
 void Write_DAC(){
+
+
 
 }
 
@@ -530,6 +532,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
 //Função de leitura no modulo sensor
 uint8_t PCF8591_ReadAnalog(uint8_t channel)
 {
