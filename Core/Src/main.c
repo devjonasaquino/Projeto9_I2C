@@ -86,6 +86,13 @@ static void MX_USB_OTG_FS_PCD_Init(void);
 //Função de leitura no modulo sensor
 uint8_t PCF8591_ReadAnalog(uint8_t channel);
 
+	// Inicio do DAC - Jonas
+	#define PCF8591_ADDRESS 0x48 << 1  // Endereço do PCF8591, verifique se é o mesmo no seu módulo
+
+	uint8_t dac_value = 127; // Valor inicial para o DAC (entre 0 e 255)
+	char uart_buffer[20];
+
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -220,9 +227,24 @@ void Read_Pot(){
 
 void Write_DAC(){
 
+	{       // Teste do DAC 2 - Jonas
+	        // Configura o valor do DAC no PCF8591
+	        uint8_t data[2] = {0x40, dac_value};  // 0x40 seleciona o DAC, seguido do valor do DAC
+	        if (HAL_I2C_Master_Transmit(&hi2c1, PCF8591_ADDRESS, data, 2, HAL_MAX_DELAY) != HAL_OK) {
+	            Error_Handler();
+	        }
 
+	        // Exibe o valor escrito no DAC no terminal via UART
+	        snprintf(uart_buffer, sizeof(uart_buffer), "DAC Value: %d\r\n", dac_value);
+	        HAL_UART_Transmit(&huart3, (uint8_t *)uart_buffer, strlen(uart_buffer), HAL_MAX_DELAY);
 
-}
+	        // Aumenta o valor do DAC com limite de 0 a 255
+	        dac_value = (dac_value + 10) % 256;
+
+	        HAL_Delay(1000); // Intervalo de 1 segundo para cada envio
+	    }
+	}
+
 
 /**
   * @brief System Clock Configuration
